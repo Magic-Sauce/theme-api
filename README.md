@@ -2,7 +2,7 @@
 
 ## Description
 
-This API enables you 
+This API enables you to use CRUD operations for themese
 
 ## Installation
 
