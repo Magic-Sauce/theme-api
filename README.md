@@ -2,7 +2,7 @@
 
 ## Description
 
-This API enables you to use CRUD operations for themese
+This API enables you to do CRUD operations for themes
 
 ## Installation
 
