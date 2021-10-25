@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { ObjectId } from 'bson';
 
 import { themeDb } from '../db.connection';
 import { ThemeResultsDto } from './types';
@@ -46,7 +45,7 @@ export class ThemeService {
     });
   }
 
-  async flushDefaultTheme() {
+  async _flushDefaultTheme() {
     await themeDb.update(
       { default: true },
       { $set: { default: false } },
@@ -55,13 +54,13 @@ export class ThemeService {
   }
 
   async createTheme(createDto: any) {
-    if (createDto.default === true) await this.flushDefaultTheme();
+    if (createDto.default === true) await this._flushDefaultTheme();
 
     return themeDb.insert(createDto);
   }
 
   async updateTheme(id: string, update: any) {
-    if (update.default === true) await this.flushDefaultTheme();
+    if (update.default === true) await this._flushDefaultTheme();
 
     return themeDb.update(
       {
