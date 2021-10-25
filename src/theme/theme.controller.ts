@@ -51,17 +51,6 @@ export class ThemeController {
     return doc;
   }
 
-  @Post(':id/default')
-  @ApiResponse({
-    type: DBTheme,
-  })
-  async setDefaultTheme(@Param('id') id: string) {
-    const existingTheme = await this._service.getThemeById(id);
-    if (!existingTheme) throw new NotFoundException();
-
-    return this._service.setDefaultTheme(id);
-  }
-
   @Post()
   @ApiResponse({
     type: ThemeResultsDto,

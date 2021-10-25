@@ -54,16 +54,6 @@ export class ThemeService {
     );
   }
 
-  async setDefaultTheme(id: string) {
-    await this.flushDefaultTheme();
-
-    return themeDb.update(
-      { _id: id },
-      { $set: { default: true } },
-      { returnUpdatedDocs: true },
-    );
-  }
-
   async createTheme(createDto: any) {
     if (createDto.default === true) await this.flushDefaultTheme();
 
