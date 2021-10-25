@@ -3,3 +3,5 @@ export * from './query.dto';
 
 export class CreateThemeDto {}
 export class UpdateThemeDto {}
+
+export class DBTheme {}

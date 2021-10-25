@@ -7,12 +7,14 @@ import {
   Patch,
   Post,
   Body,
+  NotFoundException,
 } from '@nestjs/common';
 import {
   CreateThemeDto,
   UpdateThemeDto,
   GetThemesDto,
   ThemeResultsDto,
+  DBTheme,
 } from './types';
 import { ThemeService } from './theme.service';
 import { ApiBody, ApiResponse } from '@nestjs/swagger';
@@ -29,12 +31,35 @@ export class ThemeController {
     return this._service.getThemes(query);
   }
 
+  @Get('/default')
+  @ApiResponse({
+    type: DBTheme,
+  })
+  getDefault() {
+    const doc = this._service.getDefaultTheme();
+    if (!doc) throw new NotFoundException();
+    return doc;
+  }
+
   @Get(':id')
   @ApiResponse({
-    type: ThemeResultsDto,
+    type: DBTheme,
   })
   getTheme(@Param('id') id: string) {
-    return this._service.getThemeById(id);
+    const doc = this._service.getThemeById(id);
+    if (!doc) throw new NotFoundException('Not found');
+    return doc;
+  }
+
+  @Post(':id/default')
+  @ApiResponse({
+    type: DBTheme,
+  })
+  async setDefaultTheme(@Param('id') id: string) {
+    const existingTheme = await this._service.getThemeById(id);
+    if (!existingTheme) throw new NotFoundException();
+
+    return this._service.setDefaultTheme(id);
   }
 
   @Post()
@@ -51,7 +76,9 @@ export class ThemeController {
     type: ThemeResultsDto,
   })
   @ApiBody({ type: UpdateThemeDto })
-  updateTheme(@Body() body: any, @Param('id') id: string) {
+  async updateTheme(@Body() body: any, @Param('id') id: string) {
+    const existingTheme = await this._service.getThemeById(id);
+    if (!existingTheme) throw new NotFoundException();
     return this._service.updateTheme(id, body);
   }
 
@@ -60,7 +87,11 @@ export class ThemeController {
     type: ThemeResultsDto,
   })
   async deleteTheme(@Param('id') id: string) {
+    const existingTheme = await this._service.getThemeById(id);
+    if (!existingTheme) throw new NotFoundException();
+
     await this._service.deleteTheme(id);
+
     return { status: 'success' };
   }
 }

@@ -40,12 +40,39 @@ export class ThemeService {
     });
   }
 
+  async getDefaultTheme() {
+    return themeDb.findOne({
+      default: true,
+    });
+  }
+
+  async flushDefaultTheme() {
+    await themeDb.update(
+      { default: true },
+      { $set: { default: false } },
+      { multi: true },
+    );
+  }
+
+  async setDefaultTheme(id: string) {
+    await this.flushDefaultTheme();
+
+    return themeDb.update(
+      { _id: id },
+      { $set: { default: true } },
+      { returnUpdatedDocs: true },
+    );
+  }
+
   async createTheme(createDto: any) {
+    if (createDto.default === true) await this.flushDefaultTheme();
+
     return themeDb.insert(createDto);
   }
 
   async updateTheme(id: string, update: any) {
-    console.log(id, { $set: update });
+    if (update.default === true) await this.flushDefaultTheme();
+
     return themeDb.update(
       {
         _id: id,
