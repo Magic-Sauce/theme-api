@@ -6,6 +6,8 @@ This API enables you to do CRUD operations for themes
 
 ## Installation
 
+Use NodeJs 12
+
 ```bash
 $ npm install
 ```
