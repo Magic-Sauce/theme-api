@@ -25,6 +25,16 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
+## NeDB
+
+The API uses [NeDB](https://github.com/louischatriot/nedb) which is an in memory datastore whose query lang is a subset of MongoDB.
+
+It is a NoSQL DB in nature and it writes to `theme.data.db`.
+
+If NeDB is working well you should see `"Theme Database Loaded"` logged to the console.
+
+If you do not see this there may be an issue with the API accessing your file system. Please contact steven@withnorby.com if you get stuck.
+
 ## API Base Endpoint
 
 http://localhost:3000
